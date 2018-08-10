@@ -1,5 +1,7 @@
 package com.springboot.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
  
+	private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
+	
     @Autowired
     private AuthenticationEntryPoint authEntryPoint;
  
@@ -42,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String password = "123";
  
         String encrytedPassword = this.passwordEncoder().encode(password);
-        System.out.println("Encoded password of 123=" + encrytedPassword);
+        log.info("Encoded password of 123=" + encrytedPassword);
          
          
         InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> //
@@ -51,8 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Defines 2 users, stored in memory.
         // ** Spring BOOT >= 2.x (Spring Security 5.x)
         // Spring auto add ROLE_
-        UserDetails u1 = User.withUsername("tom").password(encrytedPassword).roles("USER").build();
-        UserDetails u2 = User.withUsername("jerry").password(encrytedPassword).roles("USER").build();
+        UserDetails u1 = User.withUsername("admin").password(encrytedPassword).roles("ADMIN").build();
+        UserDetails u2 = User.withUsername("user").password(encrytedPassword).roles("USER").build();
  
         mngConfig.withUser(u1);
         mngConfig.withUser(u2);
